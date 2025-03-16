@@ -16,7 +16,14 @@ import { ChevronDown } from "lucide-react";
 import SettingsModal from "./settings.jsx";
 import SubscriptionModal from "./subscription.jsx"; // Import the new component
 
-export default function Sidebar({ isOpen, setIsOpen, theme, setTheme }) {
+export default function Sidebar({
+  isOpen,
+  setIsOpen,
+  theme,
+  setTheme,
+  onLogout,
+  user, // Add user prop
+}) {
   const [search, setSearch] = useState("");
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false); // Add state for subscription modal
@@ -25,7 +32,7 @@ export default function Sidebar({ isOpen, setIsOpen, theme, setTheme }) {
     {
       icon: <MessageSquare className="w-5 h-5 text-white" />,
       text: "Chats",
-      count: "48",
+      count: "8",
     },
     {
       icon: (
@@ -67,18 +74,6 @@ export default function Sidebar({ isOpen, setIsOpen, theme, setTheme }) {
       Icon: FiTriangle,
       color: "#d1402f",
     },
-    {
-      to: "/dashboard",
-      name: "Prescriptions",
-      Icon: IoSquareOutline,
-      color: "#e26e21",
-    },
-    {
-      to: "/test-components",
-      name: "Symptoms",
-      Icon: FaRegCircle,
-      color: "#82dbf7",
-    },
   ];
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -118,7 +113,7 @@ export default function Sidebar({ isOpen, setIsOpen, theme, setTheme }) {
               className="w-52 flex items-center justify-between p-2 rounded-lg hover:bg-[#262729]"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
-              <span className="text-[#9c9491f3] ">Chatlist</span>
+              <span className="text-[#9c9491f3] ">Core Topics</span>
               <ChevronDown
                 className={`w-4 h-4 ml-2 transition-all ${
                   isDropdownOpen ? "rotate-180" : ""
@@ -140,10 +135,6 @@ export default function Sidebar({ isOpen, setIsOpen, theme, setTheme }) {
                     </a>
                   </li>
                 ))}
-                <button className="text-[#9c9491f3] flex mt-4 gap-3 text-center pl-1 hover:text-gray-600">
-                  <IoMdAddCircleOutline className="mt-1 hover:text-gray-600 " />
-                  <h1 className="hover:text-gray-600">Add new project</h1>
-                </button>
               </ul>
             )}
           </div>
@@ -154,15 +145,22 @@ export default function Sidebar({ isOpen, setIsOpen, theme, setTheme }) {
             <div className="flex">
               <div className="flex ">
                 <div className="w-8 h-8 rounded-full bg-blue-500 overflow-hidden">
-                  <img src="/placeholder-avatar.png" alt="User" />
+                  <img src="/profile.png" alt="M" className="h-8 w-8" />
                 </div>
-                <div className="ml-3">
-                  <div className="text-sm text-white">medicoz</div>
-                  <div className="text-xs text-gray-400">medicoz@01.net</div>
+                <div className="ml-3 ">
+                  <div className="text-sm text-white">
+                    {user ? user.firstName : "Loading..."}
+                  </div>
+                  <div className="text-xs text-gray-400">
+                    {user ? user.email : "Loading..."}
+                  </div>
                 </div>
               </div>
               <div className="ml-auto">
-                <FaPowerOff className="mt-2 mr-4 text-white" />
+                <FaPowerOff
+                  className="mt-2 mr-4 text-white"
+                  onClick={onLogout}
+                />
               </div>
             </div>
           </div>
